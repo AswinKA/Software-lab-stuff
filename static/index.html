@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriCare - Crop Information & Disease Management System</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Vanilla CSS Custom Style -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="app-header">
+        <div class="header-container">
+            <a href="#" class="app-logo" id="nav-logo">
+                <i class="fa-solid fa-leaf"></i>
+                <span>AgriCare</span>
+            </a>
+            
+            <nav class="app-nav">
+                <button class="nav-link active" id="nav-catalog"><i class="fa-solid fa-list-check"></i> Crops Catalog</button>
+                <button class="nav-link hidden" id="nav-messages"><i class="fa-solid fa-comments"></i> Direct Messages <span class="badge hidden" id="dm-badge"></span></button>
+                <button class="nav-link hidden" id="nav-admin"><i class="fa-solid fa-user-shield"></i> Admin Dashboard</button>
+            </nav>
+            
+            <div class="header-auth" id="header-auth-section">
+                <!-- Dynamically loaded auth status -->
+                <button class="auth-btn btn-primary" id="btn-show-login"><i class="fa-solid fa-sign-in-alt"></i> Login</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="app-main">
+        
+        <!-- Hero Banner Section -->
+        <section class="hero-banner" id="hero-section">
+            <div class="hero-content">
+                <h1>Protect Your Yields with AgriCare</h1>
+                <p>Access authoritative crop information, diagnose plant diseases, view expert treatment plans, and consult with the community.</p>
+                <div class="search-bar-container">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" id="global-search-input" placeholder="Search crops by common name, scientific name or diseases...">
+                </div>
+            </div>
+        </section>
+
+        <!-- 1. CATALOG VIEW -->
+        <section class="view-section" id="view-catalog">
+            <div class="section-header">
+                <h2>Crops & Cultivation Index</h2>
+                <p>Browse detailed crop profiles, scientific benefits, and disease identifiers.</p>
+            </div>
+            <div class="crops-grid" id="crops-grid-container">
+                <!-- Dynamically populated crop cards -->
+            </div>
+        </section>
+
+        <!-- 2. CROP DETAIL VIEW -->
+        <section class="view-section hidden" id="view-crop-detail">
+            <button class="btn btn-secondary back-btn" id="btn-back-to-catalog">
+                <i class="fa-solid fa-arrow-left"></i> Back to Catalog
+            </button>
+            
+            <div class="crop-detail-layout">
+                <!-- Crop Profile Header Card -->
+                <div class="crop-profile-header card">
+                    <div class="profile-info">
+                        <h2 class="crop-common-name" id="detail-common-name">Tomato</h2>
+                        <h4 class="crop-scientific-name" id="detail-scientific-name">Solanum lycopersicum</h4>
+                        <div class="crop-medicinal-box">
+                            <h5><i class="fa-solid fa-hand-holding-medical"></i> Health & Medicinal Benefits:</h5>
+                            <p id="detail-medicinal-benefits">Rich in Lycopene and vitamin C.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Image Gallery (Side-by-Side Healthy vs Infected) -->
+                <div class="crop-gallery-section card">
+                    <h3>Visual Plant Gallery (Healthy vs. Infected)</h3>
+                    <p class="subtitle">Examine the differences between healthy crop stages and affected disease visual symptoms.</p>
+                    <div class="gallery-grids">
+                        <div>
+                            <h4 class="gallery-type-title healthy-title"><i class="fa-solid fa-circle-check"></i> Healthy Crops</h4>
+                            <div class="gallery-row" id="healthy-gallery">
+                                <!-- Healthy images -->
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="gallery-type-title infected-title"><i class="fa-solid fa-circle-xmark"></i> Infected / Symptomatic Crops</h4>
+                            <div class="gallery-row" id="infected-gallery">
+                                <!-- Infected images -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Collapsible Diseases Section (Accordion) -->
+                <div class="crop-diseases-section card">
+                    <h3>Common Diseases & Treatment Plans</h3>
+                    <p class="subtitle">Click on a disease category to expand and see descriptions, diagnoses, and treatment options.</p>
+                    <div class="accordion" id="disease-accordion">
+                        <!-- Dynamically filled accordion items -->
+                    </div>
+                </div>
+
+                <!-- Comments/Questions Section -->
+                <div class="crop-comments-section card">
+                    <h3>Community Comments & Q&A</h3>
+                    <p class="subtitle">Ask questions or share cultivation advice. Comments are moderated automatically according to Terms of Service.</p>
+                    
+                    <div class="comment-form-container hidden" id="comment-input-area">
+                        <form id="comment-form">
+                            <textarea id="comment-text" placeholder="Write your comment or question here... (Please adhere to our ToS)" required></textarea>
+                            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i> Post Comment</button>
+                        </form>
+                    </div>
+                    <div class="auth-prompt card" id="comment-auth-prompt">
+                        <p><i class="fa-solid fa-circle-info"></i> Please <a href="#" class="auth-link-trigger">login or register</a> to post comments or ask questions.</p>
+                    </div>
+
+                    <div class="comments-list" id="comments-list-container">
+                        <!-- Comments list -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. DIRECT MESSAGES VIEW -->
+        <section class="view-section hidden" id="view-messages">
+            <div class="section-header">
+                <h2>Direct Messages</h2>
+                <p>Discuss crops, prevention tips, and share experiences privately with other farmers and admins.</p>
+            </div>
+            
+            <div class="messages-layout card">
+                <!-- Left Sidebar: Conversations & Contacts -->
+                <div class="messages-sidebar">
+                    <div class="sidebar-block">
+                        <h4><i class="fa-solid fa-clock-rotate-left"></i> Recent Chats</h4>
+                        <ul class="chat-list" id="recent-chats-list">
+                            <!-- Recent chat list -->
+                        </ul>
+                    </div>
+                    <div class="sidebar-block border-top">
+                        <h4><i class="fa-solid fa-users"></i> Available Users</h4>
+                        <ul class="chat-list" id="all-users-list">
+                            <!-- All active users -->
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Right Pane: Chat Window -->
+                <div class="chat-window" id="chat-window-pane">
+                    <div class="chat-empty-state" id="chat-empty-state">
+                        <i class="fa-regular fa-comments"></i>
+                        <h3>Your Conversations</h3>
+                        <p>Select a contact from the sidebar to start exchanging private messages.</p>
+                    </div>
+                    
+                    <div class="chat-active-state hidden" id="chat-active-state">
+                        <div class="chat-header">
+                            <div class="chat-partner-info">
+                                <i class="fa-solid fa-circle-user avatar"></i>
+                                <span class="partner-email" id="chat-partner-name">john@agri.com</span>
+                            </div>
+                        </div>
+                        
+                        <div class="chat-messages-container" id="chat-messages-body">
+                            <!-- Messages history -->
+                        </div>
+                        
+                        <form class="chat-input-form" id="chat-send-form">
+                            <input type="text" id="chat-message-text" placeholder="Type your message here..." required autocomplete="off">
+                            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. ADMIN DASHBOARD VIEW -->
+        <section class="view-section hidden" id="view-admin">
+            <div class="section-header">
+                <h2>Admin Control Center</h2>
+                <p>Add crops, update disease treatments, upload reference images, and manage user bans.</p>
+            </div>
+
+            <div class="admin-layout">
+                <!-- Left sidebar tabs -->
+                <div class="admin-nav-tabs">
+                    <button class="admin-tab-btn active" data-target="admin-tab-crops"><i class="fa-solid fa-plus-circle"></i> Add New Crop</button>
+                    <button class="admin-tab-btn" data-target="admin-tab-diseases"><i class="fa-solid fa-virus-slash"></i> Disease Management</button>
+                    <button class="admin-tab-btn" data-target="admin-tab-images"><i class="fa-solid fa-image"></i> Upload Crop Images</button>
+                    <button class="admin-tab-btn" data-target="admin-tab-users"><i class="fa-solid fa-user-slash"></i> User Moderation</button>
+                </div>
+
+                <!-- Right tab contents -->
+                <div class="admin-tab-contents card">
+                    
+                    <!-- TAB 1: ADD CROP -->
+                    <div class="admin-tab-panel" id="admin-tab-crops">
+                        <h3>Create Crop Profile</h3>
+                        <form id="admin-add-crop-form">
+                            <div class="form-group">
+                                <label for="crop-sc-name">Scientific Name (e.g. Solanum lycopersicum)</label>
+                                <input type="text" id="crop-sc-name" required placeholder="Scientific Name">
+                            </div>
+                            <div class="form-group">
+                                <label for="crop-cm-name">Common Name (e.g. Tomato)</label>
+                                <input type="text" id="crop-cm-name" required placeholder="Common Name">
+                            </div>
+                            <div class="form-group">
+                                <label for="crop-med-benefit">Medicinal & Health Benefits</label>
+                                <textarea id="crop-med-benefit" placeholder="Enter health values, nutrients, and medical benefits..." rows="4"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-check"></i> Add Crop</button>
+                        </form>
+                    </div>
+
+                    <!-- TAB 2: DISEASE MANAGEMENT -->
+                    <div class="admin-tab-panel hidden" id="admin-tab-diseases">
+                        <h3>Add/Update Crop Disease Profile</h3>
+                        <form id="admin-manage-disease-form">
+                            <div class="form-group">
+                                <label for="disease-crop-select">Select Crop</label>
+                                <select id="disease-crop-select" required>
+                                    <!-- Populated dynamically -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="disease-name">Disease Name</label>
+                                <input type="text" id="disease-name" required placeholder="e.g. Early Blight">
+                            </div>
+                            <div class="form-group">
+                                <label for="disease-desc">Description (Symptoms, Cause)</label>
+                                <textarea id="disease-desc" required placeholder="Describe leaves mottling, rotting or spots..." rows="3"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="disease-treatment">Treatment Plan & Mitigation</label>
+                                <textarea id="disease-treatment" required placeholder="Enter organic sprays, copper fungicides, rotation practices..." rows="4"></textarea>
+                            </div>
+                            <div class="form-group checkbox-group">
+                                <input type="checkbox" id="disease-treatable" checked>
+                                <label for="disease-treatable">Is this disease treatable?</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-save"></i> Save Disease Info</button>
+                        </form>
+                    </div>
+
+                    <!-- TAB 3: UPLOAD IMAGES -->
+                    <div class="admin-tab-panel hidden" id="admin-tab-images">
+                        <h3>Upload Crop Reference Images</h3>
+                        <form id="admin-upload-image-form" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="upload-crop-select">Select Crop</label>
+                                <select id="upload-crop-select" required>
+                                    <!-- Populated dynamically -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="upload-type">Image Type</label>
+                                <select id="upload-type" required>
+                                    <option value="healthy">Healthy Crop Visual</option>
+                                    <option value="infected">Infected Crop Visual</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="upload-file">Select Image File (JPG, JPEG, PNG only)</label>
+                                <input type="file" id="upload-file" accept=".png, .jpg, .jpeg" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-upload"></i> Upload Image</button>
+                        </form>
+                    </div>
+
+                    <!-- TAB 4: USER MODERATION -->
+                    <div class="admin-tab-panel hidden" id="admin-tab-users">
+                        <h3>Register User Management</h3>
+                        <p class="subtitle">Moderators can restrict access (Ban) for users spreading misinformation or spamming, or restore access (Unban).</p>
+                        <div class="table-container">
+                            <table class="user-moderation-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="moderation-users-list">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- AUTHENTICATION DIALOG (Modal overlay) -->
+    <div class="modal-overlay hidden" id="auth-modal">
+        <div class="modal-content card">
+            <button class="modal-close" id="btn-close-auth"><i class="fa-solid fa-xmark"></i></button>
+            
+            <div class="auth-tabs">
+                <button class="auth-tab-btn active" id="auth-tab-login-btn">Login</button>
+                <button class="auth-tab-btn" id="auth-tab-register-btn">Register</button>
+            </div>
+            
+            <!-- Login Form -->
+            <form id="login-form" class="auth-form">
+                <div class="form-group">
+                    <label for="login-email">Email Address</label>
+                    <input type="email" id="login-email" required placeholder="name@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" required placeholder="Enter password">
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Sign In</button>
+            </form>
+
+            <!-- Register Form -->
+            <form id="register-form" class="auth-form hidden">
+                <div class="form-group">
+                    <label for="register-email">Email Address</label>
+                    <input type="email" id="register-email" required placeholder="name@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Password</label>
+                    <input type="password" id="register-password" required placeholder="Create strong password">
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification System -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <footer class="app-footer">
+        <div class="footer-container">
+            <p>&copy; 2026 AgriCare Portal. Dedicated to resilient farming & disease diagnostics.</p>
+        </div>
+    </footer>
+
+    <!-- Frontend App Script -->
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
